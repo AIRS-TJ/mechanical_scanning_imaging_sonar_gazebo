@@ -6,13 +6,16 @@ Sonar based on a the article **[A novel GPU-based sonar simulator for real-time 
 For more information, consult the [documentation](https://github.com/Brazilian-Institute-of-Robotics/mechanical_scanning_imaging_sonar_gazebo/wiki).
 
 ros melodic+gazebo9:
-$ cd ~/catkin_ws/src/
-$ git clone https://github.com/AIRS-TJ/sonar_msgs.git
-$ git clone https://github.com/AIRS-TJ/mechanical_scanning_imaging_sonar_gazebo.git -b melodic
-$ cd ..
-$ catkin_make
+==================
+build:
+<br>`$ cd ~/catkin_ws/src/`
+<br>`$ git clone https://github.com/AIRS-TJ/sonar_msgs.git`
+<br>`$ git clone https://github.com/AIRS-TJ/mechanical_scanning_imaging_sonar_gazebo.git -b melodic`
+<br>`$ cd ..`
+<br>`$ catkin_make`
+
 run:
-$ roslaunch mechanical_scanning_imaging_sonar_gazebo car_sonar.launch
+<br>`$ roslaunch mechanical_scanning_imaging_sonar_gazebo car_sonar.launch`
 
 But, just so you can see how it works:
 
