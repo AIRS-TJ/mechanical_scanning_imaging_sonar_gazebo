@@ -35,7 +35,7 @@ void MSISonarRos::Load(sensors::SensorPtr _parent, sdf::ElementPtr _sdf)
   std::string worldName = this->sensor->WorldName();
 
   this->world = physics::get_world("default");
-  parent = this->world->GetEntity(this->sensor->ParentName());
+  parent = this->world->EntityByName(this->sensor->ParentName());
 
   GZ_ASSERT(parent, "This parent does not exisst");
 
@@ -50,7 +50,7 @@ void MSISonarRos::Load(sensors::SensorPtr _parent, sdf::ElementPtr _sdf)
   checkMax = true;
 
   rotationAxis = static_cast<RotAxis>(gazebo::SDFTool::GetSDFElement<int>(_sdf, "axis_rotation"));
-  angleInit = this->GetAngleFromPose(current->GetRelativePose());
+  angleInit = this->GetAngleFromPose(current->RelativePose());
   angleAct = angleInit;
 
   this->localRotation = _sdf->Get<ignition::math::Vector3d>("local_rotation");
@@ -114,20 +114,20 @@ void MSISonarRos::Load(sensors::SensorPtr _parent, sdf::ElementPtr _sdf)
 
 void MSISonarRos::OnPreRender()
 {
-  math::Pose prePose = current->GetRelativePose();
-  current->SetRelativePose(math::Pose(prePose.pos.x, prePose.pos.y, prePose.pos.z,
-                                      prePose.rot.GetRoll() + this->localRotation.X(),
-                                      prePose.rot.GetPitch() + this->localRotation.Y(),
-                                      prePose.rot.GetYaw() + this->localRotation.Z()));
-  this->sonar->PreRender(current->GetWorldCoGPose());
+  ignition::math::Pose3d prePose = current->RelativePose();
+  current->SetRelativePose(ignition::math::Pose3d(prePose.Pos().X(), prePose.Pos().Y(), prePose.Pos().Z(),
+                                      prePose.Rot().Roll() + this->localRotation.X(),
+                                      prePose.Rot().Pitch() + this->localRotation.Y(),
+                                      prePose.Rot().Yaw() + this->localRotation.Z()));
+  this->sonar->PreRender(current->WorldCoGPose());
   current->SetRelativePose(prePose);
-  current->SetRelativePose(math::Pose(prePose.pos.x, prePose.pos.y, prePose.pos.z,
-                                      prePose.rot.GetRoll() - angleInit * (rotationAxis == RotAxis::X),
-                                      prePose.rot.GetPitch() - angleInit * (rotationAxis == RotAxis::Y),
-                                      prePose.rot.GetYaw() - angleInit * (rotationAxis == RotAxis::Z)));
-  angDispl = this->GetAngleFromPose(current->GetRelativePose());
+  current->SetRelativePose(ignition::math::Pose3d(prePose.Pos().X(), prePose.Pos().Y(), prePose.Pos().Z(),
+                                      prePose.Rot().Roll() - angleInit * (rotationAxis == RotAxis::X),
+                                      prePose.Rot().Pitch() - angleInit * (rotationAxis == RotAxis::Y),
+                                      prePose.Rot().Yaw() - angleInit * (rotationAxis == RotAxis::Z)));
+  angDispl = this->GetAngleFromPose(current->RelativePose());
   current->SetRelativePose(prePose);
-  angleAct = this->GetAngleFromPose(current->GetRelativePose());
+  angleAct = this->GetAngleFromPose(current->RelativePose());
 
   // gzwarn << "Angle Disp" << angDispl << "check max " << checkMax << std::endl;
 
@@ -149,7 +149,7 @@ void MSISonarRos::OnPoseUpdate()
     checkMax = true;
   }
 
-  current->SetAngularVel(math::Vector3(0, 0, angularVelocity));
+  current->SetAngularVel(ignition::math::Vector3d(0, 0, angularVelocity));
 }
 
 void MSISonarRos::OnUpdate()
@@ -202,16 +202,16 @@ void MSISonarRos::OnPostRender()
   }
 }
 
-double MSISonarRos::GetAngleFromPose(math::Pose _pose)
+double MSISonarRos::GetAngleFromPose(ignition::math::Pose3d _pose)
 {
   switch (rotationAxis)
   {
   case RotAxis::X:
-    return _pose.rot.GetRoll();
+    return _pose.Rot().Roll();
   case RotAxis::Y:
-    return _pose.rot.GetPitch();
+    return _pose.Rot().Pitch();
   case RotAxis::Z:
-    return _pose.rot.GetYaw();
+    return _pose.Rot().Yaw();
   default:
     gzerr << "This axis does not exists" << std::endl;
     break;

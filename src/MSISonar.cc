@@ -498,10 +498,10 @@ bool MSISonar::SetProjectionType(const std::string &_type)
 }
 
 //////////////////////////////////////////////////
-void MSISonar::PreRender(const math::Pose &_pose)
+void MSISonar::PreRender(const ignition::math::Pose3d &_pose)
 {
-  ignition::math::Pose3d poseIgnition(_pose.pos.x, _pose.pos.y, _pose.pos.z,
-                                      _pose.rot.w, _pose.rot.x, _pose.rot.y, _pose.rot.z);
+  ignition::math::Pose3d poseIgnition(_pose.Pos().X(), _pose.Pos().Y(), _pose.Pos().Z(),
+                                      _pose.Rot().W(), _pose.Rot().X(), _pose.Rot().Y(), _pose.Rot().Z());
 
   this->SetWorldPose(poseIgnition);
 }
@@ -544,8 +544,8 @@ SonarStampedPtr MSISonar::SonarRosMsg(const gazebo::physics::WorldPtr _world, fl
   this->UpdateData();
 
   SonarStampedPtr sonarOutput = boost::shared_ptr<sonar_msgs::SonarStamped>(new sonar_msgs::SonarStamped);
-  sonarOutput->header.stamp.sec = _world->GetSimTime().sec;
-  sonarOutput->header.stamp.nsec = _world->GetSimTime().nsec;
+  sonarOutput->header.stamp.sec = _world->SimTime().sec;
+  sonarOutput->header.stamp.nsec = _world->SimTime().nsec;
   sonarOutput->num_bins = this->binCount;
   sonarOutput->num_beams = this->beamCount;
   sonarOutput->beams_width = this->HorzFOV();

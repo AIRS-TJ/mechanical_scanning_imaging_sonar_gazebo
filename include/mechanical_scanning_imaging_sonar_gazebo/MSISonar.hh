@@ -249,7 +249,7 @@ public:
    * @param _pose Set position of the camera
    */
 public:
-  void PreRender(const math::Pose &_pose);
+  void PreRender(const ignition::math::Pose3d &_pose);
 
   /**
    * @brief Get the Sonar Image to cartesian cv::Mat

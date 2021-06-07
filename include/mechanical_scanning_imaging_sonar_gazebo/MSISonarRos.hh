@@ -85,7 +85,7 @@ public:
 
 protected:
   /// \brief Get angle from pose
-  double GetAngleFromPose(math::Pose _pose);
+  double GetAngleFromPose(ignition::math::Pose3d _pose);
 
   /// \brief Local Rotation
   ignition::math::Vector3d localRotation;
