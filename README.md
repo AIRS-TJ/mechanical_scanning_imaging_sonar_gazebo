@@ -5,7 +5,7 @@ Sonar based on a the article **[A novel GPU-based sonar simulator for real-time 
 
 For more information, consult the [documentation](https://github.com/Brazilian-Institute-of-Robotics/mechanical_scanning_imaging_sonar_gazebo/wiki).
 
-ros melodic+gazebo9:
+ros melodic+gazebo9
 ==================
 build:
 <br>`$ cd ~/catkin_ws/src/`
